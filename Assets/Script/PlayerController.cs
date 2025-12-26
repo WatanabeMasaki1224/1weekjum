@@ -9,10 +9,12 @@ public class PlayerController : MonoBehaviour
     public float jumpPower = 5f;
     Rigidbody2D rb;
     private bool ground;
+    Vector2 startPosition;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        startPosition = transform.position;
     }
 
     private void Update()
@@ -41,5 +43,19 @@ public class PlayerController : MonoBehaviour
         {
             ground = false;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Pit"))
+        {
+            Respawn();
+        }
+    }
+
+    void Respawn()
+    {
+        transform.position = startPosition;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero; 
     }
 }
