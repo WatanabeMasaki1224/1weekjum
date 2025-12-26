@@ -7,6 +7,10 @@ public class WorldSwitch : MonoBehaviour
     public int playerLayer;
     public int lightWallLayer;
     bool isLightWorld = true;
+    public GameObject darkCanvas;
+    public Timer timer;
+    float switchCooldown = 1.0f;
+    float lastSwitchTime;
 
     void Start()
     {
@@ -16,9 +20,10 @@ public class WorldSwitch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && Time.time - lastSwitchTime > switchCooldown)
         {
             isLightWorld = !isLightWorld;
+            lastSwitchTime = Time.time;
             ApplyWorld();
         }
     }
@@ -31,6 +36,18 @@ public class WorldSwitch : MonoBehaviour
             !isLightWorld
             );
 
-        Camera.main.backgroundColor = isLightWorld ? Color.white : Color.black;
+        if (isLightWorld)
+        {
+            Camera.main.backgroundColor = Color.white;
+            darkCanvas.SetActive(false);
+        }
+        else
+        {
+            Camera.main.backgroundColor = Color.black;
+            darkCanvas.SetActive(true);
+        }
+
+        // É^ÉCÉÄÇÕèÌÇ…å©Ç¶ÇÈ
+        timer.SetVisible(true);
     }
 }
