@@ -10,10 +10,14 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     private bool ground;
     Vector2 startPosition;
+    Animator anim;
+    SpriteRenderer sr;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
         startPosition = transform.position;
     }
 
@@ -25,6 +29,12 @@ public class PlayerController : MonoBehaviour
         { 
             rb.velocity = new Vector2(rb.velocity.x,jumpPower);
         }
+        // プレイヤーの向きを変更
+        if (x > 0) sr.flipX = false;  // 右向き
+        else if (x < 0) sr.flipX = true; // 左向き
+
+        anim.SetFloat("speed", Mathf.Abs(x));
+            anim.SetBool("isJumping", !ground);
     }
 
     void OnCollisionEnter2D(Collision2D col)
